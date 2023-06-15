@@ -71,6 +71,7 @@ class _ChatState extends State<Chat> {
                         return Scrollbar(
                           controller: myScrollController,
                           child: ListView.builder(
+                              controller: myScrollController,
                               reverse: true,
                               physics: const AlwaysScrollableScrollPhysics(
                                   parent: BouncingScrollPhysics()),

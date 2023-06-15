@@ -35,7 +35,7 @@ Future<http.Response> post(urll, data) async {
 
     final response = await http
         .post(url, headers: tokenData, body: json.encode(data))
-        .timeout(const Duration(seconds: 10), onTimeout: () {
+        .timeout(const Duration(minutes: 2), onTimeout: () {
       throw ErrorException("fel inträffat");
     });
     if (response.statusCode != 200) {

@@ -47,6 +47,7 @@ class HomeGrid extends StatelessWidget {
     return Consumer<ChatBotP>(
       builder: (context, myType, child) {
         return Scrollbar(
+          controller: myScrollController,
           radius: Radius.circular(16),
           child: GridView.builder(
             controller: myScrollController,
