@@ -5,6 +5,7 @@ import 'package:lawyer/helper/http.dart';
 import 'package:lawyer/url.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 enum MessageType { Sent, Received }
 
@@ -55,27 +56,55 @@ class MessageP with ChangeNotifier {
   }
 
   disconnect() async {
-    final jwt = await getToken();
-    final socket = doSocketConnection(jwt);
-    socket.disconnect();
+    try {
+      // final socket = await doSocketConnection();
+      final storage = new FlutterSecureStorage();
+      final jwt = await storage.read(key: "token");
+      IO.Socket socket = IO.io(
+          myUrl,
+          IO.OptionBuilder()
+              .setTransports(['websocket'])
+              .enableAutoConnect()
+              .build());
+
+      socket.io.options['extraHeaders'] = {
+        "token": jwt
+      }; // Update the extra headers.
+
+      if (socket.connected) {
+        socket.disconnect();
+      }
+    } catch (e) {
+      rethrow;
+    }
   }
 
   doConnect() async {
     try {
-      final jwt = await getToken();
-      final socket = doSocketConnection(jwt);
+      final storage = new FlutterSecureStorage();
+      final jwt = await storage.read(key: "token");
+      IO.Socket socket = IO.io(
+          myUrl,
+          IO.OptionBuilder()
+              .setTransports(['websocket'])
+              .disableAutoConnect()
+              .build());
+
+      socket.io.options['extraHeaders'] = {
+        "token": jwt
+      }; // Update the extra headers.
+
       if (socket.disconnected) {
         socket.connect();
       }
       socket.off("response");
       socket.on("response", (data) {
-        print("res");
         var ressolt = messages[0].text + data;
         messages[0].text = ressolt;
         notifyListeners();
       });
     } catch (e) {
-      print(e);
+      rethrow;
     }
   }
 
@@ -100,22 +129,29 @@ class MessageP with ChangeNotifier {
   }
 
   Future getToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    final jwt = prefs.getString("token");
+    final storage = new FlutterSecureStorage();
+// Read value
+    String? jwt = "";
+    jwt = await storage.read(key: "token");
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // final jwt = prefs.getString("token");
     return jwt;
   }
 
-  IO.Socket doSocketConnection(jwt) {
-    final IO.Socket socket = IO.io(
-      myUrl,
-        // 'http://192.168.1.49:3000',
-        IO.OptionBuilder()
-            .setTransports(['websocket'])
-            .setExtraHeaders({"token": jwt})
-            .disableAutoConnect()
-            // .setQuery({"token": jwt})
-            // .setAuth({"token": jwt})
-            .build());
-    return socket;
-  }
+  // Future<IO.Socket> doSocketConnection() async {
+  //   final storage = new FlutterSecureStorage();
+  //   final jwt = await storage.read(key: "token");
+  //   IO.Socket socket = IO.io(
+  //       // myUrl,
+  //       'http://192.168.1.49:3000',
+  //       IO.OptionBuilder()
+  //           .setTransports(['websocket'])
+  //           .setExtraHeaders({"token": jwt})
+  //           .disableAutoConnect()
+  //           // .setQuery({"token": jwt})
+  //           // .setAuth({"token": jwt})
+  //           .build());
+
+  //   return socket;
+  // }
 }

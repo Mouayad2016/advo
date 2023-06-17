@@ -5,11 +5,22 @@ import 'package:http/http.dart' as http;
 import 'package:lawyer/models/exception.dart';
 import 'package:lawyer/url.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 Future<http.Response> get(urll) async {
   try {
     final url = Uri.parse('$myUrl/$urll');
-    Map<String, String> tokenData = {"Content-Type": "application/json"};
+    // SharedPreferences prefs = await SharedPreferences.getInstance();
+    // final jwt = prefs.getString("token");
+    final storage = new FlutterSecureStorage();
+
+// Read value
+    String? jwt = await storage.read(key: "token");
+    Map<String, String> tokenData = {};
+    tokenData = {"Content-Type": "application/json"};
+    if (jwt != null) {
+      tokenData = {"Content-Type": "application/json", "token": jwt};
+    }
     final response = await http
         .get(
       url,
@@ -31,8 +42,13 @@ Future<http.Response> get(urll) async {
 Future<http.Response> post(urll, data) async {
   try {
     final url = Uri.parse('$myUrl/$urll');
-    final prefs = await SharedPreferences.getInstance();
-    final jwt = prefs.getString("token");
+    // final prefs = await SharedPreferences.getInstance();
+    // final jwt = prefs.getString("token");
+
+    final storage = new FlutterSecureStorage();
+
+// Read value
+    String? jwt = await storage.read(key: "token");
     Map<String, String> tokenData = {};
     tokenData = {"Content-Type": "application/json"};
     if (jwt != null) {

@@ -38,6 +38,7 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: Container(
+        height: 70,
         width: double.infinity,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -53,14 +54,21 @@ class _ProfileState extends State<Profile> {
             ),
           ],
         ),
-        child: TextButton(
-          onPressed: () async {
-            await Provider.of<AuthP>(context, listen: false).logOutUser();
-            Navigator.of(context)
-                .pushNamedAndRemoveUntil("/", (route) => false);
-            Navigator.of(context).pushNamed(LoginPage.routName);
-          },
-          child: const Text('Logga ut'),
+        child: Column(
+          children: [
+            Container(
+              width: double.infinity,
+              child: TextButton(
+                onPressed: () async {
+                  await Provider.of<AuthP>(context, listen: false).logOutUser();
+                  Navigator.of(context)
+                      .pushNamedAndRemoveUntil("/", (route) => false);
+                  Navigator.of(context).pushNamed(LoginPage.routName);
+                },
+                child: const Text('Logga ut'),
+              ),
+            ),
+          ],
         ),
       ),
       appBar: AppBar(

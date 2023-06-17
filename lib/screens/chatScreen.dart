@@ -25,13 +25,15 @@ class _ChatState extends State<Chat> {
     // TODO: implement initState
     super.initState();
   }
-@override
+
+  @override
   void dispose() {
-        myProvider.disconnect();
+    myProvider.disconnect();
 
     // TODO: implement dispose
     super.dispose();
   }
+
   Future getData() async {
     final ChatScreenroutArgs conversation =
         ModalRoute.of(context)!.settings.arguments as ChatScreenroutArgs;
