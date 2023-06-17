@@ -25,7 +25,13 @@ class _ChatState extends State<Chat> {
     // TODO: implement initState
     super.initState();
   }
+@override
+  void dispose() {
+        myProvider.disconnect();
 
+    // TODO: implement dispose
+    super.dispose();
+  }
   Future getData() async {
     final ChatScreenroutArgs conversation =
         ModalRoute.of(context)!.settings.arguments as ChatScreenroutArgs;
@@ -109,7 +115,7 @@ class _ChatState extends State<Chat> {
                                       return;
                                     }
                                     final textBody =
-                                        textFildContrioller.value.text;
+                                        textFildContrioller.value.text.trim();
                                     textFildContrioller.clear();
                                     ChatScreenroutArgs conversation =
                                         ModalRoute.of(context)!
@@ -120,7 +126,8 @@ class _ChatState extends State<Chat> {
                                       final res = await myProvider.doMessages(
                                           textBody,
                                           conversation.comversationId,
-                                          conversation.chatbotId);
+                                          conversation.chatbotId,
+                                          conversation.chatBotIdentifier);
                                       conversation.comversationId =
                                           res['receivedMessage']
                                               ['conversation_id'];
@@ -139,7 +146,8 @@ class _ChatState extends State<Chat> {
                                       myProvider.doMessages(
                                           textBody,
                                           conversation.comversationId,
-                                          conversation.chatbotId);
+                                          conversation.chatbotId,
+                                          conversation.chatBotIdentifier);
                                       textFildContrioller.clear();
                                     }
                                   }

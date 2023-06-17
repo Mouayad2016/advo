@@ -113,7 +113,7 @@ class MyApp extends StatelessWidget {
                 ),
                 prefixIconColor: Colors.grey[600],
                 filled: true,
-                fillColor: Colors.grey[100],
+                fillColor: Colors.white,
                 hintStyle: TextStyle(
                   color: Colors.grey[400],
                   fontWeight: FontWeight.w600,

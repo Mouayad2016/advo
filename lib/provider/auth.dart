@@ -59,6 +59,7 @@ class AuthP with ChangeNotifier {
       }
       return;
     } catch (error) {
+      print(error);
       rethrow;
     }
   }

@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:lawyer/helper/http.dart';
+import 'package:lawyer/url.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum MessageType { Sent, Received }
 
@@ -52,31 +54,38 @@ class MessageP with ChangeNotifier {
     notifyListeners();
   }
 
-  disconnect() {
-    final socket = doSocketConnection();
+  disconnect() async {
+    final jwt = await getToken();
+    final socket = doSocketConnection(jwt);
     socket.disconnect();
   }
 
-  doConnect() {
-    final socket = doSocketConnection();
-    if (socket.disconnected) {
-      socket.connect();
+  doConnect() async {
+    try {
+      final jwt = await getToken();
+      final socket = doSocketConnection(jwt);
+      if (socket.disconnected) {
+        socket.connect();
+      }
+      socket.off("response");
+      socket.on("response", (data) {
+        print("res");
+        var ressolt = messages[0].text + data;
+        messages[0].text = ressolt;
+        notifyListeners();
+      });
+    } catch (e) {
+      print(e);
     }
-    socket.off("response");
-    socket.on("response", (data) {
-      var ressolt = messages[0].text + data;
-      messages[0].text = ressolt;
-      notifyListeners();
-    });
   }
 
-  Future doMessages(text, conversationId, chatbotId) async {
+  Future doMessages(text, conversationId, chatbotId, chatBotIdentifier) async {
     try {
       isGenerating = true;
       notifyListeners();
       var data = {
-        "user_id": 1,
         "conversation_id": conversationId,
+        "chatBotIdentifier": chatBotIdentifier,
         "text": text,
         "chatBot_id": chatbotId
       };
@@ -90,12 +99,19 @@ class MessageP with ChangeNotifier {
     }
   }
 
-  IO.Socket doSocketConnection() {
+  Future getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    final jwt = prefs.getString("token");
+    return jwt;
+  }
+
+  IO.Socket doSocketConnection(jwt) {
     final IO.Socket socket = IO.io(
-        'http://192.168.1.49:8080',
+      myUrl,
+        // 'http://192.168.1.49:3000',
         IO.OptionBuilder()
             .setTransports(['websocket'])
-            .setExtraHeaders({"userid": 1})
+            .setExtraHeaders({"token": jwt})
             .disableAutoConnect()
             // .setQuery({"token": jwt})
             // .setAuth({"token": jwt})

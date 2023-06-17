@@ -11,11 +11,13 @@ class ChatScreenroutArgs {
   final int? chatbotId;
   int? comversationId;
   String title;
+  final String chatBotIdentifier;
   final bool isNewConversation;
   ChatScreenroutArgs(
       {required this.chatbotId,
       required this.comversationId,
       required this.title,
+      required this.chatBotIdentifier,
       required this.isNewConversation});
 }
 
@@ -98,6 +100,7 @@ class _ChatBotState extends State<ChatBot> {
                                   arguments: ChatScreenroutArgs(
                                       title: "",
                                       chatbotId: chatBot.id,
+                                      chatBotIdentifier: chatBot.chatbotid,
                                       comversationId: null,
                                       isNewConversation: true));
                             },
@@ -124,6 +127,7 @@ class _ChatBotState extends State<ChatBot> {
                                               .allConversation[index].title,
                                           chatbotId: myType
                                               .allConversation[index].chatBotId,
+                                          chatBotIdentifier: chatBot.chatbotid,
                                           comversationId:
                                               myType.allConversation[index].id,
                                           isNewConversation: false,
@@ -212,6 +216,7 @@ class _ChatBotState extends State<ChatBot> {
         onPressed: () {
           Navigator.of(context).pushNamed(Chat.routName,
               arguments: ChatScreenroutArgs(
+                  chatBotIdentifier: chatBot.chatbotid,
                   title: "",
                   chatbotId: chatBot.id,
                   comversationId: null,

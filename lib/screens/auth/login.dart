@@ -74,16 +74,24 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ],
           ),
-          child: TextButton(
-            onPressed: () async {
-              Navigator.of(context).pushNamed(Signup.routName);
-            },
-            child: const Text(
-              'Registrera dig',
-              style: TextStyle(
-                fontSize: 16,
+          height: 70,
+          child: Column(
+            children: [
+              Container(
+                width: double.infinity,
+                child: TextButton(
+                  onPressed: () async {
+                    Navigator.of(context).pushNamed(Signup.routName);
+                  },
+                  child: const Text(
+                    'Registrera dig',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
         ),
         body: Center(
