@@ -9,6 +9,7 @@ import 'package:lawyer/screens/chatScreen.dart';
 import 'package:lawyer/screens/hem.dart';
 import 'package:lawyer/screens/auth/login.dart';
 import 'package:lawyer/screens/profile.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'package:provider/provider.dart';
 import './layout/mobile.dart';
@@ -86,6 +87,12 @@ class MyApp extends StatelessWidget {
             appBarTheme: AppBarTheme(
               backgroundColor: mySecound,
               elevation: 4,
+              titleTextStyle: TextStyle(
+                // color: Colors.grey[600],
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                fontFamily: 'Roboto',
+              ),
               iconTheme: IconThemeData(
                 color: Colors
                     .grey[600], // Set the color of the icons in the app bar

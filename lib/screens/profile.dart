@@ -5,6 +5,7 @@ import 'package:lawyer/screens/auth/login.dart';
 import 'package:lawyer/widgets/futureBuilder.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Profile extends StatefulWidget {
   static const routName = "/profile";
@@ -36,6 +37,8 @@ class _ProfileState extends State<Profile> {
 
   @override
   Widget build(BuildContext context) {
+    final scaffoldState = ScaffoldMessenger.of(context);
+
     return Scaffold(
       bottomNavigationBar: Container(
         height: 70,
@@ -123,14 +126,6 @@ class _ProfileState extends State<Profile> {
                     leading: const Icon(FontAwesomeIcons.wallet),
                     title: const Text('Din plan'),
                     subtitle: const Text('Gratis version'),
-                    trailing: TextButton(
-                      onPressed: () {
-                        // TODO: Handle upgrade button press
-                      },
-                      style:
-                          TextButton.styleFrom(foregroundColor: Colors.green),
-                      child: const Text('Uppgradera'),
-                    ),
                   ),
                   const SizedBox(height: 20),
                 ]),
@@ -159,15 +154,78 @@ class _ProfileState extends State<Profile> {
                   SocialMediaButton(
                       icon: FontAwesomeIcons.discord,
                       label: 'Gå med i vår Discord',
-                      onPressed: () {/* TODO */}),
+                      onPressed: () async {
+                        final Uri _url =
+                            Uri.parse('https://discord.gg/xChDvaH4');
+                        try {
+                          if (await canLaunchUrl(_url)) {
+                            await launchUrl(
+                              _url,
+                              mode: LaunchMode.externalApplication,
+                            );
+                          } else {
+                            scaffoldState.showSnackBar(SnackBar(
+                              content: Text(
+                                  'Fel inträffade kunde inte ansluta till Discord appen eller Webbläsare på din enhet'),
+                            ));
+                          }
+                        } catch (e) {
+                          scaffoldState.showSnackBar(SnackBar(
+                            content: Text(
+                                'Fel inträffade kunde inte ansluta till Discord appen eller Webbläsare på din enhet'),
+                          ));
+                        }
+                      }),
                   SocialMediaButton(
                       icon: FontAwesomeIcons.facebook,
                       label: 'Gilla oss på Facebook',
-                      onPressed: () {/* TODO */}),
+                      onPressed: () async {
+                        try {
+                          final Uri _url = Uri.parse(
+                              'https://www.facebook.com/profile.php?id=100094121333285');
+                          if (await canLaunchUrl(_url)) {
+                            await launchUrl(
+                              _url,
+                              mode: LaunchMode.externalApplication,
+                            );
+                          } else {
+                            scaffoldState.showSnackBar(SnackBar(
+                              content: Text(
+                                  'Fel inträffade kunde inte ansluta till Facebook appen eller Webbläsare på din enhet'),
+                            ));
+                          }
+                        } catch (e) {
+                          scaffoldState.showSnackBar(SnackBar(
+                            content: Text(
+                                'Fel inträffade kunde inte ansluta till Facebook appen eller Webbläsare på din enhet'),
+                          ));
+                        }
+                      }),
                   SocialMediaButton(
                       icon: FontAwesomeIcons.linkedin,
                       label: 'Följ oss på LinkedIn',
-                      onPressed: () {/* TODO */}),
+                      onPressed: () async {
+                        try {
+                          final Uri _url = Uri.parse(
+                              'https://www.linkedin.com/company/advose/?viewAsMember=true');
+                          if (await canLaunchUrl(_url)) {
+                            await launchUrl(
+                              _url,
+                              mode: LaunchMode.externalApplication,
+                            );
+                          } else {
+                            scaffoldState.showSnackBar(SnackBar(
+                              content: Text(
+                                  'Fel inträffade kunde inte ansluta till LinkedIn appen eller Webbläsare på din enhet'),
+                            ));
+                          }
+                        } catch (e) {
+                          scaffoldState.showSnackBar(SnackBar(
+                            content: Text(
+                                'Fel inträffade kunde inte ansluta till LinkedIn appen eller Webbläsare på din enhet'),
+                          ));
+                        }
+                      }),
                   const SizedBox(height: 20),
                 ]),
               ),

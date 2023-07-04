@@ -5,7 +5,6 @@ import 'package:lawyer/helper/http.dart';
 import 'package:lawyer/url.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 enum MessageType { Sent, Received }
 
@@ -20,9 +19,14 @@ class Message {
 class MessageP with ChangeNotifier {
   bool isGenerating = false;
   List<Message> messages = [];
+  bool isScreenOppen = false;
 
   get allmessages {
     return [...messages];
+  }
+
+  void updateMessages(ms) {
+    messages[0] = ms;
   }
 
   Future getConversationById(conId) async {
@@ -57,9 +61,8 @@ class MessageP with ChangeNotifier {
 
   disconnect() async {
     try {
-      // final socket = await doSocketConnection();
-      final storage = new FlutterSecureStorage();
-      final jwt = await storage.read(key: "token");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final jwt = prefs.getString("token");
       IO.Socket socket = IO.io(
           myUrl,
           IO.OptionBuilder()
@@ -72,7 +75,10 @@ class MessageP with ChangeNotifier {
       }; // Update the extra headers.
 
       if (socket.connected) {
-        socket.disconnect();
+        print("socket.connected");
+        socket.off("response");
+        socket.close();
+        print(socket.connected);
       }
     } catch (e) {
       rethrow;
@@ -81,8 +87,8 @@ class MessageP with ChangeNotifier {
 
   doConnect() async {
     try {
-      final storage = new FlutterSecureStorage();
-      final jwt = await storage.read(key: "token");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final jwt = prefs.getString("token");
       IO.Socket socket = IO.io(
           myUrl,
           IO.OptionBuilder()
@@ -101,6 +107,7 @@ class MessageP with ChangeNotifier {
       socket.on("response", (data) {
         var ressolt = messages[0].text + data;
         messages[0].text = ressolt;
+        print(ressolt);
         notifyListeners();
       });
     } catch (e) {
@@ -118,10 +125,15 @@ class MessageP with ChangeNotifier {
         "text": text,
         "chatBot_id": chatbotId
       };
-      final response = await post("me", data);
+      final response = await postChatMessage("me", data);
       final cleanres = json.decode(response.body);
+      if (messages[0].text != cleanres['receivedMessage']['text']) {
+        messages[0].text = cleanres['receivedMessage']['text'];
+      }
       isGenerating = false;
-      notifyListeners();
+      if (isScreenOppen) {
+        notifyListeners();
+      }
       return cleanres;
     } catch (e) {
       rethrow;
@@ -129,12 +141,8 @@ class MessageP with ChangeNotifier {
   }
 
   Future getToken() async {
-    final storage = new FlutterSecureStorage();
-// Read value
-    String? jwt = "";
-    jwt = await storage.read(key: "token");
-    // SharedPreferences prefs = await SharedPreferences.getInstance();
-    // final jwt = prefs.getString("token");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final jwt = prefs.getString("token"); // Read value
     return jwt;
   }
 
