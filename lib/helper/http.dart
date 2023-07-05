@@ -9,13 +9,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 Future<http.Response> get(urll) async {
   try {
     final url = Uri.parse('$myUrl/$urll');
-    Map<String, String> tokenData = {"Content-Type": "application/json"};
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final jwt = prefs.getString("token");
+
+    Map<String, String> tokenData = {};
+    tokenData = {"Content-Type": "application/json"};
+    if (jwt != null) {
+      tokenData = {"Content-Type": "application/json", "token": jwt};
+    }
     final response = await http
         .get(
       url,
       headers: tokenData,
     )
-        .timeout(const Duration(seconds: 10), onTimeout: () {
+        .timeout(const Duration(seconds: 5), onTimeout: () {
       throw ErrorException("fel inträffat");
     });
     if (response.statusCode == 400) {
@@ -33,6 +40,41 @@ Future<http.Response> post(urll, data) async {
     final url = Uri.parse('$myUrl/$urll');
     final prefs = await SharedPreferences.getInstance();
     final jwt = prefs.getString("token");
+
+    ;
+    Map<String, String> tokenData = {};
+    tokenData = {"Content-Type": "application/json"};
+    if (jwt != null) {
+      tokenData = {"Content-Type": "application/json", "token": jwt};
+    }
+    final response = await http
+        .post(url, headers: tokenData, body: json.encode(data))
+        .timeout(const Duration(seconds: 5), onTimeout: () {
+      throw ErrorException("fel inträffat");
+    });
+    if (response.statusCode != 200) {
+      final cleanResposne = json.decode(response.body);
+      if (response.statusCode == 401) {
+        throw ConflictException("E-post eller lösenord är fel!");
+      }
+      if (response.statusCode == 402) {
+        throw ConflictException("E-post är redan använd!");
+      }
+      throw ErrorException(cleanResposne['error']);
+    }
+    return response;
+  } catch (error) {
+    rethrow;
+  }
+}
+
+Future<http.Response> postChatMessage(urll, data) async {
+  try {
+    final url = Uri.parse('$myUrl/$urll');
+    final prefs = await SharedPreferences.getInstance();
+    final jwt = prefs.getString("token");
+
+    ;
     Map<String, String> tokenData = {};
     tokenData = {"Content-Type": "application/json"};
     if (jwt != null) {
@@ -61,13 +103,17 @@ Future<http.Response> post(urll, data) async {
 
 Future<http.Response> delete(urll) async {
   try {
+    final prefs = await SharedPreferences.getInstance();
+    final jwt = prefs.getString("token");
     final url = Uri.parse('$myUrl/$urll');
     Map<String, String> tokenData = {};
     tokenData = {"Content-Type": "application/json"};
-
+    if (jwt != null) {
+      tokenData = {"Content-Type": "application/json", "token": jwt};
+    }
     final response = await http
         .delete(url, headers: tokenData)
-        .timeout(const Duration(seconds: 10), onTimeout: () {
+        .timeout(const Duration(seconds: 5), onTimeout: () {
       throw ErrorException("fel inträffat");
     });
     if (response.statusCode != 200) {

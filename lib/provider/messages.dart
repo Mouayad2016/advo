@@ -19,9 +19,14 @@ class Message {
 class MessageP with ChangeNotifier {
   bool isGenerating = false;
   List<Message> messages = [];
+  bool isScreenOppen = false;
 
   get allmessages {
     return [...messages];
+  }
+
+  void updateMessages(ms) {
+    messages[0] = ms;
   }
 
   Future getConversationById(conId) async {
@@ -55,27 +60,58 @@ class MessageP with ChangeNotifier {
   }
 
   disconnect() async {
-    final jwt = await getToken();
-    final socket = doSocketConnection(jwt);
-    socket.disconnect();
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final jwt = prefs.getString("token");
+      IO.Socket socket = IO.io(
+          myUrl,
+          IO.OptionBuilder()
+              .setTransports(['websocket'])
+              .enableAutoConnect()
+              .build());
+
+      socket.io.options['extraHeaders'] = {
+        "token": jwt
+      }; // Update the extra headers.
+
+      if (socket.connected) {
+        print("socket.connected");
+        socket.off("response");
+        socket.close();
+        print(socket.connected);
+      }
+    } catch (e) {
+      rethrow;
+    }
   }
 
   doConnect() async {
     try {
-      final jwt = await getToken();
-      final socket = doSocketConnection(jwt);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final jwt = prefs.getString("token");
+      IO.Socket socket = IO.io(
+          myUrl,
+          IO.OptionBuilder()
+              .setTransports(['websocket'])
+              .disableAutoConnect()
+              .build());
+
+      socket.io.options['extraHeaders'] = {
+        "token": jwt
+      }; // Update the extra headers.
+
       if (socket.disconnected) {
         socket.connect();
       }
       socket.off("response");
       socket.on("response", (data) {
-        print("res");
         var ressolt = messages[0].text + data;
         messages[0].text = ressolt;
+        print(ressolt);
         notifyListeners();
       });
     } catch (e) {
-      print(e);
+      rethrow;
     }
   }
 
@@ -89,10 +125,15 @@ class MessageP with ChangeNotifier {
         "text": text,
         "chatBot_id": chatbotId
       };
-      final response = await post("me", data);
+      final response = await postChatMessage("me", data);
       final cleanres = json.decode(response.body);
+      if (messages[0].text != cleanres['receivedMessage']['text']) {
+        messages[0].text = cleanres['receivedMessage']['text'];
+      }
       isGenerating = false;
-      notifyListeners();
+      if (isScreenOppen) {
+        notifyListeners();
+      }
       return cleanres;
     } catch (e) {
       rethrow;
@@ -100,22 +141,25 @@ class MessageP with ChangeNotifier {
   }
 
   Future getToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    final jwt = prefs.getString("token");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final jwt = prefs.getString("token"); // Read value
     return jwt;
   }
 
-  IO.Socket doSocketConnection(jwt) {
-    final IO.Socket socket = IO.io(
-      myUrl,
-        // 'http://192.168.1.49:3000',
-        IO.OptionBuilder()
-            .setTransports(['websocket'])
-            .setExtraHeaders({"token": jwt})
-            .disableAutoConnect()
-            // .setQuery({"token": jwt})
-            // .setAuth({"token": jwt})
-            .build());
-    return socket;
-  }
+  // Future<IO.Socket> doSocketConnection() async {
+  //   final storage = new FlutterSecureStorage();
+  //   final jwt = await storage.read(key: "token");
+  //   IO.Socket socket = IO.io(
+  //       // myUrl,
+  //       'http://192.168.1.49:3000',
+  //       IO.OptionBuilder()
+  //           .setTransports(['websocket'])
+  //           .setExtraHeaders({"token": jwt})
+  //           .disableAutoConnect()
+  //           // .setQuery({"token": jwt})
+  //           // .setAuth({"token": jwt})
+  //           .build());
+
+  //   return socket;
+  // }
 }

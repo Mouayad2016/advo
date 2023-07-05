@@ -48,12 +48,6 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SizedBox(
-                width: 75,
-                child: Image.asset(
-                  'assets/images/logo_without_text_and_tagline.png', // Additional properties can be set here, such as width, height, etc.
-                ),
-              ),
               Text(
                 "Advo",
               )

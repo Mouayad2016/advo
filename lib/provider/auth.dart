@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:lawyer/helper/http.dart';
+import 'package:lawyer/models/exception.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthP with ChangeNotifier {
   Future signUp(
@@ -25,8 +27,9 @@ class AuthP with ChangeNotifier {
   }
 
   Future<String> get jwtOrEmpty async {
+    // final prefs = await SharedPreferences.getInstance();
     final prefs = await SharedPreferences.getInstance();
-    var jwt = prefs.getString("token");
+    final jwt = prefs.getString("token");
     if (jwt == null) return "";
     return jwt;
   }
@@ -43,7 +46,7 @@ class AuthP with ChangeNotifier {
     String email,
     String pass,
   ) async {
-    final prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       var data = {
         "email": email,
@@ -59,7 +62,6 @@ class AuthP with ChangeNotifier {
       }
       return;
     } catch (error) {
-      print(error);
       rethrow;
     }
   }

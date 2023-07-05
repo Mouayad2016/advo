@@ -172,12 +172,14 @@ class _ChatBotState extends State<ChatBot> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text(
-                                          myType.allConversation[index].title,
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black,
+                                        Expanded(
+                                          child: Text(
+                                            myType.allConversation[index].title,
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
                                           ),
                                         ),
                                         IconButton(

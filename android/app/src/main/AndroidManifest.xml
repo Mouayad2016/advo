@@ -1,5 +1,32 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.lawyer">
+      <queries>
+     <intent>
+       <action android:name="android.intent.action.VIEW" />
+       <data android:scheme="sms" />
+     </intent>
+     <intent>
+        <action android:name="android.intent.action.VIEW" />
+        <data android:scheme="tel" />
+     </intent>
+     <intent>
+        <action android:name="android.intent.action.VIEW" />
+        <data android:scheme="https" />
+     </intent>
+         <intent>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="discord"/>
+    </intent>
+     <intent>
+        <action android:name="android.intent.action.VIEW" />
+        <data android:scheme="file" />
+     </intent>
+     <intent>
+        <action android:name="android.intent.action.VIEW" />
+        <data android:scheme="mailto" />
+     </intent>
+   </queries>
    <application
         android:label="Advo"
         android:name="${applicationName}"
@@ -24,6 +51,7 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+                 <!-- Insert your intent-filter here -->
         </activity>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
