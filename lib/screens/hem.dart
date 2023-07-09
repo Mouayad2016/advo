@@ -58,98 +58,100 @@ class HomeGrid extends StatelessWidget {
                 crossAxisCount: 2),
             itemBuilder: (BuildContext context, int index) {
               return InkWell(
-                onTap: () {
-                  Navigator.of(context).pushNamed(ChatBot.routName,
-                      arguments: ChatBotC(
-                          id: myType.chatBots[index].id,
-                          title: myType.chatBots[index].title,
-                          isfree: myType.chatBots[index].isfree,
-                          chatbotid: myType.chatBots[index].chatbotid));
-                },
-                child: Container(
-                  margin: const EdgeInsets.all(16),
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        spreadRadius: 1,
-                        blurRadius: 5,
-                        offset: const Offset(0, 2),
+                  onTap: () {
+                    Navigator.of(context).pushNamed(ChatBot.routName,
+                        arguments: ChatBotC(
+                            id: myType.chatBots[index].id,
+                            title: myType.chatBots[index].title,
+                            isfree: myType.chatBots[index].isfree,
+                            chatbotid: myType.chatBots[index].chatbotid));
+                  },
+                  child: SafeArea(
+                    child: Container(
+                      margin: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            spreadRadius: 1,
+                            blurRadius: 5,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
+                      child: Column(
                         children: [
+                          Row(
+                            children: [
+                              Container(
+                                width: 60,
+                                height: 60,
+                                decoration: BoxDecoration(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  shape: BoxShape.circle,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.2),
+                                      spreadRadius: 1,
+                                      blurRadius: 2,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ],
+                                ),
+                                child: Icon(
+                                  FontAwesomeIcons.microchip,
+                                  color: Colors.grey[600]!,
+                                  size: 18,
+                                ),
+                              ),
+                              const SizedBox(width: 32),
+                              Expanded(
+                                child: Divider(
+                                  color: Colors.grey.shade600,
+                                  thickness: 1,
+                                ),
+                              ),
+                              Icon(
+                                size: 18,
+                                color: Colors.grey.shade600,
+                                FontAwesomeIcons.angleRight,
+                              )
+                            ],
+                          ),
+                          Spacer(),
                           Container(
-                            width: 60,
-                            height: 60,
+                            padding: EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 16),
                             decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.secondary,
-                              shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
                                   color: Colors.black.withOpacity(0.2),
                                   spreadRadius: 1,
-                                  blurRadius: 2,
+                                  blurRadius: 5,
                                   offset: const Offset(0, 2),
                                 ),
                               ],
+                              color: Theme.of(context).colorScheme.primary,
+                              borderRadius: BorderRadius.circular(16),
                             ),
-                            child: Icon(
-                              FontAwesomeIcons.microchip,
-                              color: Colors.grey[600]!,
-                              size: 18,
+                            child: Text(
+                              myType.chatBots[index].title,
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
                             ),
                           ),
-                          const SizedBox(width: 32),
-                          Expanded(
-                            child: Divider(
-                              color: Colors.grey.shade600,
-                              thickness: 1,
-                            ),
-                          ),
-                          Icon(
-                            size: 18,
-                            color: Colors.grey.shade600,
-                            FontAwesomeIcons.angleRight,
-                          )
                         ],
                       ),
-                      Spacer(),
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              spreadRadius: 1,
-                              blurRadius: 5,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                          color: Theme.of(context).colorScheme.primary,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Text(
-                          myType.chatBots[index].title,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
+                    ),
+                  ));
             },
           ),
         );

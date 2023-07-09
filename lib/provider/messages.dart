@@ -75,10 +75,8 @@ class MessageP with ChangeNotifier {
       }; // Update the extra headers.
 
       if (socket.connected) {
-        print("socket.connected");
         socket.off("response");
         socket.close();
-        print(socket.connected);
       }
     } catch (e) {
       rethrow;
@@ -107,7 +105,6 @@ class MessageP with ChangeNotifier {
       socket.on("response", (data) {
         var ressolt = messages[0].text + data;
         messages[0].text = ressolt;
-        print(ressolt);
         notifyListeners();
       });
     } catch (e) {

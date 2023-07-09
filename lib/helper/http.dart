@@ -87,12 +87,7 @@ Future<http.Response> postChatMessage(urll, data) async {
     });
     if (response.statusCode != 200) {
       final cleanResposne = json.decode(response.body);
-      if (response.statusCode == 401) {
-        throw ConflictException("E-post eller lösenord är fel!");
-      }
-      if (response.statusCode == 402) {
-        throw ConflictException("E-post är redan använd!");
-      }
+
       throw ErrorException(cleanResposne['error']);
     }
     return response;
