@@ -4,7 +4,7 @@ workflows:
     max_build_duration: 120
     environment:
       android_signing:
-        - upload-keystore.jks
+        - CM_KEYSTORE_PATH
       groups:
         - google_play
       vars:
@@ -38,6 +38,7 @@ workflows:
       email:
         recipients:
           - mouayad1998@hotmail.com
+          - mouayad.mouayad98@gmail.com
         notify:
           success: true
           failure: false
