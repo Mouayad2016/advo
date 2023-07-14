@@ -3,13 +3,13 @@ import 'package:lawyer/provider/auth.dart';
 import 'package:lawyer/provider/chatBot.dart';
 import 'package:lawyer/provider/conversation.dart';
 import 'package:lawyer/provider/messages.dart';
+import 'package:lawyer/screens/auth/policy.dart';
 import 'package:lawyer/screens/auth/signup.dart';
 import 'package:lawyer/screens/chatBot.dart';
 import 'package:lawyer/screens/chatScreen.dart';
 import 'package:lawyer/screens/hem.dart';
 import 'package:lawyer/screens/auth/login.dart';
 import 'package:lawyer/screens/profile.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'package:provider/provider.dart';
 import './layout/mobile.dart';
@@ -137,6 +137,7 @@ class MyApp extends StatelessWidget {
           Chat.routName: (ctx) => const Chat(),
           Profile.routName: (ctx) => const Profile(),
           Signup.routName: (ctx) => const Signup(),
+          Policy.routName: (ctx) => const Policy(),
         },
       ),
     );

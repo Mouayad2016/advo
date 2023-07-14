@@ -249,7 +249,7 @@ class ChatMessage extends StatelessWidget {
             width: MediaQuery.of(context).size.width * 0.85,
             child: Container(
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-              child: Text(
+              child: SelectableText(
                 message,
                 style: const TextStyle(fontSize: 16, color: Colors.white),
               ),

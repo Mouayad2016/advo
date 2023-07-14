@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lawyer/models/exception.dart';
 import 'package:lawyer/provider/auth.dart';
 import 'package:lawyer/screens/auth/helper.dart';
+import 'package:lawyer/screens/auth/policy.dart';
 import 'package:lawyer/widgets/dialog.dart';
+import 'package:lawyer/widgets/futureBuilder.dart';
+
 import 'package:lawyer/widgets/shimmer.dart';
 import 'package:provider/provider.dart';
 
@@ -24,6 +26,7 @@ class _SignupState extends State<Signup> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _isPolicyChecked = false;
 
   @override
   void dispose() {
@@ -36,6 +39,20 @@ class _SignupState extends State<Signup> {
   }
 
   bool _isLoading = false;
+  bool _isLoadingFirst = false;
+  bool? _triggerPoilcyError = null;
+  @override
+  void initState() {
+    _isLoadingFirst = true;
+    // TODO: implement initState
+    super.initState();
+  }
+
+  getPolicy() async {
+    final authP = Provider.of<AuthP>(context);
+    await authP.getPolicy();
+    _isLoadingFirst = false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,13 +65,16 @@ class _SignupState extends State<Signup> {
         String email = _emailController.text;
         String confirmPassword = _confirmPasswordController.text;
         final valid = _formKey.currentState!.validate();
-        if (valid && !_isLoading) {
+        _triggerPoilcyError = _isPolicyChecked;
+        print(_isPolicyChecked);
+        if (valid && !_isLoading && _isPolicyChecked) {
           setState(() {
             _isLoading = true;
           });
           FocusScope.of(context).requestFocus(FocusNode());
 
-          await authP.signUp(firstName, lastName, email, confirmPassword);
+          await authP.signUp(firstName, lastName, email, confirmPassword,
+              _isPolicyChecked, authP.myPolicy.id);
           showSucccessDialog(context);
         }
 
@@ -62,10 +82,16 @@ class _SignupState extends State<Signup> {
           _isLoading = false;
         });
       } on ConflictException catch (e) {
+        setState(() {
+          _isLoading = false;
+        });
         showMyErroDialog(context, e.cause, () {
           Navigator.of(context).pop();
         });
       } catch (error) {
+        setState(() {
+          _isLoading = false;
+        });
         showMyErroDialog(
             context, "Ett fel har uppstått!. Vänligen försök igen.", () {
           Navigator.of(context).pop();
@@ -260,6 +286,84 @@ class _SignupState extends State<Signup> {
                             ),
                           ),
                         ),
+                      ),
+                      const SizedBox(height: 10),
+                      Column(
+                        children: [
+                          Row(
+                            children: [
+                              Theme(
+                                data: ThemeData(
+                                  unselectedWidgetColor: Colors
+                                      .blue, // Color when Checkbox is not selected
+                                ),
+                                child: Checkbox(
+                                  value: _isPolicyChecked,
+                                  checkColor:
+                                      Colors.white, // Color of the check
+
+                                  activeColor:
+                                      Theme.of(context).colorScheme.primary,
+                                  onChanged: (bool? value) {
+                                    setState(() {
+                                      _isPolicyChecked = value!;
+                                    });
+                                  },
+                                ),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  'Jag godkänner',
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onBackground),
+                                ),
+                              ),
+                              FutureBuilderWidget(
+                                func: () {},
+                                future: _isLoadingFirst ? getPolicy() : null,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    TextButton(
+                                      onPressed: () {
+                                        // navigate to the policy page
+                                        Navigator.of(context).pushNamed(
+                                          Policy.routName,
+                                          arguments: authP.myPolicy.text,
+                                        );
+                                      },
+                                      child: Text(
+                                        'Sekretesspolicy',
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          if (_triggerPoilcyError == false) ...[
+                            Row(
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(top: 8.0, left: 16),
+                                  child: Text(
+                                    "Vänligen godkänn vårt policy",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Theme.of(context)
+                                          .errorColor, // usually red
+                                    ),
+                                  ),
+                                )
+                              ],
+                            )
+                          ]
+                        ],
                       ),
                       const SizedBox(height: 30),
                       _isLoading

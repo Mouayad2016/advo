@@ -60,6 +60,10 @@ Future<http.Response> post(urll, data) async {
       if (response.statusCode == 402) {
         throw ConflictException("E-post är redan använd!");
       }
+      if (response.statusCode == 403) {
+        throw ConflictException(
+            "För att kunna använda våra tjänster måste du godkänna vårt privacy policy. Vänligen läs och godkänn vårt policy");
+      }
       throw ErrorException(cleanResposne['error']);
     }
     return response;

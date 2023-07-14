@@ -4,22 +4,43 @@ import 'package:flutter/material.dart';
 import 'package:lawyer/helper/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+class PolicyC {
+  final int id;
+  final String text;
+  PolicyC({required this.id, required this.text});
+}
+
 class AuthP with ChangeNotifier {
-  Future signUp(
-    String fname,
-    String lName,
-    String email,
-    String pass,
-  ) async {
+  Future signUp(String fname, String lName, String email, String pass,
+      bool isPolicyAccepted, int policy_id) async {
     try {
       var data = {
         "email": email,
         "password": pass,
         "first_name": fname,
-        "last_name": lName
+        "last_name": lName,
+        "policy_accepted": isPolicyAccepted,
+        "policy_id": policy_id
       };
       await post("auth/re", data);
     } catch (error) {
+      rethrow;
+    }
+  }
+
+  PolicyC policy = PolicyC(id: 0, text: "");
+  PolicyC get myPolicy {
+    return policy;
+  }
+
+  Future getPolicy() async {
+    try {
+      final response = await get("ploicy/policies/latest");
+      final cleanRes = json.decode(response.body);
+      if (cleanRes[0] != null) {
+        policy = PolicyC(id: cleanRes[0]["id"], text: cleanRes[0]["text"]);
+      }
+    } catch (e) {
       rethrow;
     }
   }
