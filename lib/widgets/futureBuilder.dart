@@ -7,7 +7,7 @@ import 'package:lawyer/widgets/snackbar.dart';
 
 class FutureBuilderWidget extends StatelessWidget {
   final Future<dynamic>? future;
-  final Function func;
+  final Function? func;
   final Widget child;
   final Widget? onLowad;
   const FutureBuilderWidget(
@@ -29,33 +29,38 @@ class FutureBuilderWidget extends StatelessWidget {
           } else {
             if (snapShpt.error != null || snapShpt.hasError) {
               return Container(
-                child: RefreshIndicator(
-                    onRefresh: () async {
-                      try {
-                        await func();
-                      } on TimeoutException catch (e) {
-                        print("FutureBuilder");
+                child: func != null
+                    ? RefreshIndicator(
+                        onRefresh: () async {
+                          try {
+                            await func!();
+                          } on TimeoutException catch (e) {
+                            print("FutureBuilder");
 
-                        animatedSnackBarHelper(
-                            e.message, AnimatedSnackBarType.error, context);
-                      } on ErrorException catch (error) {
-                        animatedSnackBarHelper(
-                            error.cause, AnimatedSnackBarType.error, context);
-                      }
-                    },
-                    child: SingleChildScrollView(
-                        physics: const AlwaysScrollableScrollPhysics()
-                            .applyTo(const BouncingScrollPhysics()),
-                        child: Container(
-                          height: MediaQuery.of(context).size.height,
-                          padding: const EdgeInsets.all(16),
-                          alignment: Alignment.topCenter,
-                          // height: double.infinity,
-                          // width: double.infinity,
-                          child: const Text(
-                            "Some thing wnet wrong.",
-                          ),
-                        ))),
+                            animatedSnackBarHelper(
+                                e.message, AnimatedSnackBarType.error, context);
+                          } on ErrorException catch (error) {
+                            animatedSnackBarHelper(error.cause,
+                                AnimatedSnackBarType.error, context);
+                          }
+                        },
+                        child: SingleChildScrollView(
+                            physics: const AlwaysScrollableScrollPhysics()
+                                .applyTo(const BouncingScrollPhysics()),
+                            child: Container(
+                              height: MediaQuery.of(context).size.height,
+                              padding: const EdgeInsets.all(16),
+                              alignment: Alignment.topCenter,
+                              // height: double.infinity,
+                              // width: double.infinity,
+                              child: const Text(
+                                "Some thing wnet wrong.",
+                              ),
+                            )))
+                    : Text(
+                        "Fel inträffat",
+                        style: TextStyle(color: Colors.red),
+                      ),
               );
             } else {
               return child;

@@ -323,7 +323,7 @@ class _SignupState extends State<Signup> {
                                 ),
                               ),
                               FutureBuilderWidget(
-                                func: () {},
+                                func: null,
                                 future: _isLoadingFirst ? getPolicy() : null,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,

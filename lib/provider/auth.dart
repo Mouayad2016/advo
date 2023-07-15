@@ -35,9 +35,9 @@ class AuthP with ChangeNotifier {
 
   Future getPolicy() async {
     try {
-      final response = await get("ploicy/policies/latest");
-      final cleanRes = json.decode(response.body);
-      if (cleanRes[0] != null) {
+      final response = await get("policy/policies/latest");
+      List cleanRes = json.decode(response.body);
+      if (cleanRes.isNotEmpty) {
         policy = PolicyC(id: cleanRes[0]["id"], text: cleanRes[0]["text"]);
       }
     } catch (e) {

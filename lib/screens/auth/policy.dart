@@ -70,7 +70,9 @@ class Policy extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
                 child: Linkify(
                   onOpen: _onOpen,
-                  text: policyText,
+                  text: policyText != ""
+                      ? policyText
+                      : "Här hittar du vårt integritetspolicy https://advo-api.onrender.com/securitypolicy",
                   style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
