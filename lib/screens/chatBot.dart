@@ -110,11 +110,11 @@ class _ChatBotState extends State<ChatBot> {
                             )
                           ],
                         )
-                      : Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Scrollbar(
-                            radius: Radius.circular(16),
-                            controller: myScrollController,
+                      : Scrollbar(
+                          radius: Radius.circular(16),
+                          controller: myScrollController,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
                             child: ListView.separated(
                                 physics: const AlwaysScrollableScrollPhysics(
                                     parent: BouncingScrollPhysics()),
@@ -247,7 +247,7 @@ class _ChatBotState extends State<ChatBot> {
       bottomNavigationBar: BottomAppBar(
         shape: const SquareNotchedShape(notchRadius: 16),
         child: Container(
-          height: 35.0,
+          height: 40.0,
         ),
       ),
     );

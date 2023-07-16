@@ -51,6 +51,15 @@ class _LoginPageState extends State<LoginPage> {
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -94,119 +103,127 @@ class _LoginPageState extends State<LoginPage> {
             ],
           ),
         ),
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                // mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.2,
-                  ),
-                  Text(
-                    'Logga in',
-                    style: TextStyle(
-                      fontSize: 40,
-                      color: Theme.of(context).colorScheme.onBackground,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 50),
-                  SizedBox(
-                    width: 300,
-                    child: TextFormField(
-                      controller: _emailController,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Vänligen ange din e-post adress';
-                        }
-                        if (!isValidEmail(value)) {
-                          return 'Vänligen ange en korrekt e-postadress ex ex@e.com';
-                        }
-                        return null;
-                      },
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        labelText: 'E-post',
-                        prefixIcon: const Icon(
-                          Icons.mail,
-                        ),
-                        labelStyle: const TextStyle(),
+        body: Container(
+          height: double.infinity,
+          width: double.infinity,
+          child: SingleChildScrollView(
+            physics:
+                AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.2,
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    width: 300,
-                    child: TextFormField(
-                      controller: _passwordController,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Vänligen ange ett lösenord';
-                        }
-                        if (value.length < 6) {
-                          return 'Ditt lösenord måste vara minst 6 tecken långt';
-                        }
-                        return null;
-                      },
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
+                      Text(
+                        'Logga in',
+                        style: TextStyle(
+                          fontSize: 40,
+                          color: Theme.of(context).colorScheme.onBackground,
+                          fontWeight: FontWeight.bold,
                         ),
-                        labelText: 'Lösenord',
-                        prefixIcon: const Icon(
-                          Icons.lock,
-                        ),
-                        labelStyle: const TextStyle(),
                       ),
-                    ),
-                  ),
-                  const SizedBox(height: 30),
-                  SizedBox(
-                    width: 300,
-                    child: _isLoading
-                        ? shimmerWidget(ElevatedButton(
-                            onPressed: () {},
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: const Size(double.infinity, 50),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
+                      const SizedBox(height: 50),
+                      SizedBox(
+                        width: 300,
+                        child: TextFormField(
+                          controller: _emailController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Vänligen ange din e-post adress';
+                            }
+                            if (!isValidEmail(value)) {
+                              return 'Vänligen ange en korrekt e-postadress ex ex@e.com';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.0),
                             ),
-                            child: const Text(
-                              'Skicka in',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            labelText: 'E-post',
+                            prefixIcon: const Icon(
+                              Icons.mail,
                             ),
-                          ))
-                        : ElevatedButton(
-                            onPressed: () async {
-                              await logIn(); // TODO: Handle signup
-                            },
-                            style: ElevatedButton.styleFrom(
-                              minimumSize: const Size(double.infinity, 50),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                            ),
-                            child: const Text(
-                              'Skicka in',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            labelStyle: const TextStyle(),
                           ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      SizedBox(
+                        width: 300,
+                        child: TextFormField(
+                          controller: _passwordController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Vänligen ange ett lösenord';
+                            }
+                            if (value.length < 6) {
+                              return 'Ditt lösenord måste vara minst 6 tecken långt';
+                            }
+                            return null;
+                          },
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            labelText: 'Lösenord',
+                            prefixIcon: const Icon(
+                              Icons.lock,
+                            ),
+                            labelStyle: const TextStyle(),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      SizedBox(
+                        width: 300,
+                        child: _isLoading
+                            ? shimmerWidget(ElevatedButton(
+                                onPressed: () {},
+                                style: ElevatedButton.styleFrom(
+                                  minimumSize: const Size(double.infinity, 50),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                ),
+                                child: const Text(
+                                  'Skicka in',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ))
+                            : ElevatedButton(
+                                onPressed: () async {
+                                  await logIn(); // TODO: Handle signup
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  minimumSize: const Size(double.infinity, 50),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                ),
+                                child: const Text(
+                                  'Skicka in',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),

@@ -40,6 +40,14 @@ class HomeGrid extends StatelessWidget {
   const HomeGrid({
     super.key,
   });
+
+  int calculateCrossAxisCount(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    int crossAxisCount =
+        screenWidth ~/ 180; // 200 is the desired width of each grid item.
+    return crossAxisCount;
+  }
+
   @override
   Widget build(BuildContext context) {
     final ScrollController myScrollController = ScrollController();
@@ -54,8 +62,8 @@ class HomeGrid extends StatelessWidget {
             physics: const AlwaysScrollableScrollPhysics(
                 parent: BouncingScrollPhysics()),
             itemCount: myType.chatBots.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: calculateCrossAxisCount(context)),
             itemBuilder: (BuildContext context, int index) {
               return InkWell(
                   onTap: () {
