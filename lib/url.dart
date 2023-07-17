@@ -3,5 +3,3 @@
 const myUrl = "https://advo-api.onrender.com";
 
 // const myUrl = "http://192.168.1.190:3000";
-
-// 10.101.1.169
