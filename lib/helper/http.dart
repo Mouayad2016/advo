@@ -78,7 +78,6 @@ Future<http.Response> postChatMessage(urll, data) async {
     final prefs = await SharedPreferences.getInstance();
     final jwt = prefs.getString("token");
 
-    ;
     Map<String, String> tokenData = {};
     tokenData = {"Content-Type": "application/json"};
     if (jwt != null) {
