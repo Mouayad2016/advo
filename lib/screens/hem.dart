@@ -23,8 +23,8 @@ class _HemState extends State<Hem> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilderWidget(
-        func: () {
-          getData();
+        func: () async {
+          await getData();
         },
         future: getData(),
         onLowad: Container(),

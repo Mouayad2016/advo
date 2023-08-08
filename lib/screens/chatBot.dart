@@ -116,6 +116,7 @@ class _ChatBotState extends State<ChatBot> {
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: ListView.separated(
+                                controller: myScrollController,
                                 physics: const AlwaysScrollableScrollPhysics(
                                     parent: BouncingScrollPhysics()),
                                 itemBuilder: (BuildContext context, int index) {
