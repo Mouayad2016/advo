@@ -106,7 +106,7 @@ class _ChatBotState extends State<ChatBot> {
                                         isNewConversation: true));
                               },
                               message:
-                                  "Du har inga conversation med ${chatBot.title} bot skapa en !",
+                                  "Du har inga konversation med ${chatBot.title} chatbot skapa en !",
                             )
                           ],
                         )

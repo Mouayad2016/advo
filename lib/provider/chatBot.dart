@@ -25,7 +25,6 @@ class ChatBotP with ChangeNotifier {
   Future apiGetChatBots() async {
     try {
       List<ChatBotC> chatBots1 = [];
-      print("call");
       final response = await get("bot");
       if (response.statusCode == 200) {
         final cleanRes = jsonDecode(response.body);

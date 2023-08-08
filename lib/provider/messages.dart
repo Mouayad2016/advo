@@ -123,6 +123,8 @@ class MessageP with ChangeNotifier {
         "chatBot_id": chatbotId
       };
       final response = await postChatMessage("me", data);
+
+      print('Response: ${response.body}');
       final cleanres = json.decode(response.body);
       if (messages[0].text != cleanres['receivedMessage']['text']) {
         messages[0].text = cleanres['receivedMessage']['text'];
@@ -133,6 +135,9 @@ class MessageP with ChangeNotifier {
       }
       return cleanres;
     } catch (e) {
+      isGenerating = false;
+      notifyListeners();
+
       rethrow;
     }
   }

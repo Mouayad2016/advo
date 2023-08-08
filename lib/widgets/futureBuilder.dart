@@ -30,7 +30,7 @@ class FutureBuilderWidget extends StatelessWidget {
             if (snapShpt.error != null || snapShpt.hasError) {
               return Container(
                 child: func != null
-                    ? RefreshIndicator(
+                    ? RefreshIndicator.adaptive(
                         onRefresh: () async {
                           try {
                             await func!();
@@ -54,7 +54,7 @@ class FutureBuilderWidget extends StatelessWidget {
                               // height: double.infinity,
                               // width: double.infinity,
                               child: const Text(
-                                "Some thing wnet wrong.",
+                                "Oops Något gick fel !! checka din internet anslutning",
                               ),
                             )))
                     : Text(

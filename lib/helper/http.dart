@@ -78,7 +78,6 @@ Future<http.Response> postChatMessage(urll, data) async {
     final prefs = await SharedPreferences.getInstance();
     final jwt = prefs.getString("token");
 
-    ;
     Map<String, String> tokenData = {};
     tokenData = {"Content-Type": "application/json"};
     if (jwt != null) {
@@ -89,9 +88,11 @@ Future<http.Response> postChatMessage(urll, data) async {
         .timeout(const Duration(minutes: 2), onTimeout: () {
       throw ErrorException("fel inträffat");
     });
+    print(response.statusCode);
+    print(response.body);
     if (response.statusCode != 200) {
+      print(response.body);
       final cleanResposne = json.decode(response.body);
-
       throw ErrorException(cleanResposne['error']);
     }
     return response;
