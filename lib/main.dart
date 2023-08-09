@@ -31,7 +31,6 @@ MaterialColor myColor = const MaterialColor(0xFF3B6B9D, {
   900: Color(0xFF19242C),
 });
 
-
 MaterialColor mySecound = MaterialColor(0xFFD5D1A4, {
   50: Color(0xFFD5D1A4),
   100: Color(0xFFD5D1A4),
