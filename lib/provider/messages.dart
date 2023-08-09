@@ -70,7 +70,7 @@ class MessageP with ChangeNotifier {
               .enableAutoConnect()
               .build());
 
-      socket.io.options['extraHeaders'] = {
+      socket.io.options?['extraHeaders'] = {
         "token": jwt
       }; // Update the extra headers.
 
@@ -94,7 +94,7 @@ class MessageP with ChangeNotifier {
               .disableAutoConnect()
               .build());
 
-      socket.io.options['extraHeaders'] = {
+      socket.io.options?['extraHeaders'] = {
         "token": jwt
       }; // Update the extra headers.
 
@@ -123,8 +123,6 @@ class MessageP with ChangeNotifier {
         "chatBot_id": chatbotId
       };
       final response = await postChatMessage("me", data);
-
-      print('Response: ${response.body}');
       final cleanres = json.decode(response.body);
       if (messages[0].text != cleanres['receivedMessage']['text']) {
         messages[0].text = cleanres['receivedMessage']['text'];
@@ -135,9 +133,6 @@ class MessageP with ChangeNotifier {
       }
       return cleanres;
     } catch (e) {
-      isGenerating = false;
-      notifyListeners();
-
       rethrow;
     }
   }
