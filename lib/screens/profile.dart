@@ -156,7 +156,7 @@ class _ProfileState extends State<Profile> {
                       label: 'Gå med i vår Discord',
                       onPressed: () async {
                         final Uri _url =
-                            Uri.parse('https://discord.gg/xChDvaH4');
+                            Uri.parse('https://discord.gg/chNyJDr8u');
                         try {
                           if (await canLaunchUrl(_url)) {
                             await launchUrl(
