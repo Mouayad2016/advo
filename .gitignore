@@ -46,3 +46,7 @@ app.*.map.json
 
 # Exclude key.properties file
 key.properties
+
+
+
+upload-keystore.jks
