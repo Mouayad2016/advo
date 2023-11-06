@@ -22,14 +22,10 @@ To begin using this tool, please ensure you have the following prerequisites ins
 
 * Node.js
 * Flutter SDK
-* SQL database (compatible versions)
+* SQL database (compatible version `git commit --amend`s)
 
 Installation steps and detailed documentation will be provided soon to guide you through the setup process.
 
 ### Contributions
 
 We are open to contributions! If you're interested in improving this AI-driven legal tool, please read through our contribution guidelines, to be published shortly.
-
-### Acknowledgments
-
-A heartfelt thanks to all contributors and supporters who have helped shape this project, enabling it to become a potential game-changer in the legal industry.
